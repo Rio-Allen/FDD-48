@@ -1,6 +1,6 @@
 # FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios
 
-This repository contains the official dataset and code for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", undet review in Proceedings of ACM Multimedia 2025 (MM'25) Dataset Track.
+This repository contains the official dataset and code for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", under review in Proceedings of ACM Multimedia 2025 (MM'25) Dataset Track.
 
 **Authors:** Ruihao Xu, Yong Liu, Yansong Tang* (* Corresponding author)
 **Affiliation:** Tsinghua Shenzhen International Graduate School, Tsinghua University, Shenzhen, Guangdong, China
@@ -13,14 +13,14 @@ Food defect detection is a critical task in quality control for the food industr
 
 FDD-48 is a novel benchmark dataset for food defect detection designed to address the limitations of existing datasets by providing diverse real-world scenarios, fine-grained defect categories, and instance-level annotations.
 
-## Dataset Overview
+### Dataset Overview
 * **Food Types:** 13 (apple, apricot, banana, cantaloupe, cherry, lychee, mango, orange, peach, pear, plum, strawberry, and watermelon)
 * **Defect Types:** 48 distinct defect categories.
 * **Real-World Scenarios:** Covers diverse scenarios including Planting (52%), Transportation (34%), and Consumption (14%).
 * **Annotation Level:** Instance-level annotations (bounding boxes).
 ![](./README_image/dataset.jpg)
 
-## Food Defect Categories
+### Food Defect Categories
 
 ![](./README_image/datasetinfo.jpg)
 
