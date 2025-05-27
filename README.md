@@ -44,9 +44,7 @@ The data acquisition and annotation pipeline involved several steps:
 
 FDDet is a food defect detection model tailored for real-world scenarios, particularly under limited annotated data conditions. It employs RTMDet as its baseline.
 
-### Key Components
-
-#### BBoxMixUp
+### BBoxMixUp
 
 ![](./README_image/mix.jpg)
 
@@ -54,14 +52,14 @@ FDDet is a food defect detection model tailored for real-world scenarios, partic
 * It performs localized mixing exclusively within bounding boxes of the same defect category.
 * **Goal:** To break erroneous associations between defect-irrelevant features (e.g., shape, color of the fruit) and defect types, enhance diversity in non-defect features, and mitigate overfitting due to data scarcity.
 
-#### Semi-Supervised Learning (SSL) Adaptation
+### Semi-Supervised Learning (SSL) Adaptation
 * Leverages the 2,497 unlabeled samples in FDD-48 to improve model robustness.
 * Addresses training collapse issues encountered with common semi-supervised object detection frameworks on FDD-48.
 * **Modifications to stabilize training and improve performance:**
     * **Buffer Weight Updates:** The teacher model's buffer weights (e.g., Batch Normalization parameters) are updated via Exponential Moving Average (EMA). This allows the teacher model to adapt to domain shifts between labeled and unlabeled data.
     * **Pseudo-label Filtering Threshold:** A lower fixed threshold (e.g., 0.35) is used for pseudo-label filtering instead of conventional high-confidence thresholds (e.g., 0.9). This retains more potentially valuable pseudo-labels, especially given the high similarity between certain food defect types and inherently lower model confidence scores on FDD-48.
 
-#### Consistency-Guided Pseudo-Label Calibration (CGPC)
+### Consistency-Guided Pseudo-Label Calibration (CGPC)
 
 ![](./README_image/cgpc.jpg)
 
