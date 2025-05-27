@@ -1,28 +1,21 @@
 # FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios
 
-This repository contains the official dataset and code for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", published in Proceedings of ACM Multimedia 2025 (MM'25).
+This repository contains the official dataset and code for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", undet review in Proceedings of ACM Multimedia 2025 (MM'25) Dataset Track.
 
-**Authors:** Ruihao Xu, Yong Liu, Yansong Tang
-Tsinghua Shenzhen International Graduate School, Tsinghua University, Shenzhen, Guangdong, China
-*Corresponding author: Yansong Tang (tang.yansong@sz.tsinghua.edu.cn)*
-
-**Dataset Link:** [https://github.com/Rio-Allen/FDD-48](https://github.com/Rio-Allen/FDD-48) [cite: 11]
+**Authors:** Ruihao Xu, Yong Liu, Yansong Tang* (* Corresponding author)
+**Affiliation:** Tsinghua Shenzhen International Graduate School, Tsinghua University, Shenzhen, Guangdong, China
 
 ## Abstract
 
-Food defect detection is a critical task in quality control for the food industry. Recent research primarily employs deep learning methods to improve detection accuracy, yet existing studies lack a unified evaluation benchmark and are constrained by data scarcity due to high annotation costs. To address these challenges, we first introduce FDD-48, a comprehensive food defect detection dataset with fine-grained annotations across 13 food types and 48 distinct defect categories, captured under diverse real-world conditions. [cite: 4, 5, 6] Subsequently, we evaluate the performance of several mainstream general object detection models on FDD-48. [cite: 7] To enhance detection performance under limited annotated data, we propose a semi-supervised food defect detection framework named FDDet. [cite: 8] FDDet first introduces a novel data augmentation technique specifically designed for food defect detection, named BBoxMixUp, which breaks the erroneous associations between defect-irrelevant features and defect types by mixing regions corresponding to instances of the same defect category in input images. [cite: 8, 9] Additionally, FDDet incorporates a pseudo-label filtering mechanism called CGPC (Consistency-Guided Pseudo-Label Calibration), a strategy based on the assumption of label consistency among similar regions within individual samples. [cite: 9] Experiments demonstrate that, compared to mainstream object detection models, our method significantly improves detection performance on the FDD-48 dataset, validating the effectiveness of the proposed approach in enhancing the accuracy and robustness of complex food defect detection tasks under limited data conditions. [cite: 10]
+Food defect detection is a critical task in quality control for the food industry. Recent research primarily employs deep learning methods to improve detection accuracy, yet existing studies lack a unified evaluation benchmark and are constrained by data scarcity due to high annotation costs. To address these challenges, we first introduce FDD-48, a comprehensive food defect detection dataset with fine-grained annotations across 13 food types and 48 distinct defect categories, captured under diverse real-world conditions. Subsequently, we evaluate the performance of several mainstream general object detection models on FDD-48. To enhance detection performance under limited annotated data, we propose a semi-supervised food defect detection framework named FDDet. FDDet first introduces a novel data augmentation technique specifically designed for food defect detection, named BBoxMixUp, which breaks the erroneous associations between defect-irrelevant features and defect types by mixing regions corresponding to instances of the same defect category in input images. Additionally, FDDet incorporates a pseudo-label filtering mechanism called CGPC (Consistency-Guided Pseudo-Label Calibration), a strategy based on the assumption of label consistency among similar regions within individual samples. Experiments demonstrate that, compared to mainstream object detection models, our method significantly improves detection performance on the FDD-48 dataset, validating the effectiveness of the proposed approach in enhancing the accuracy and robustness of complex food defect detection tasks under limited data conditions.
 
 ## FDD-48 Dataset
 
-FDD-48 is a novel benchmark dataset for food defect detection designed to address the limitations of existing datasets by providing diverse real-world scenarios, fine-grained defect categories, and instance-level annotations. [cite: 47]
+FDD-48 is a novel benchmark dataset for food defect detection designed to address the limitations of existing datasets by providing diverse real-world scenarios, fine-grained defect categories, and instance-level annotations.
 
-### Dataset Overview
+## Food Defect Categories
 
-* **Food Types:** 13 [cite: 3, 6] (apple, apricot, banana, cantaloupe, cherry, lychee, mango, orange, peach, pear, plum, strawberry, and watermelon) [cite: 65]
-* **Defect Types:** 48 distinct defect categories. [cite: 3, 6]
-* **Real-World Scenarios:** Covers diverse scenarios including Planting (52%), Transportation (34%), and Consumption (14%). [cite: 3, 89]
-* **Image Source:** Images were automatically crawled from online search engines. [cite: 68]
-* **Annotation Level:** Instance-level annotations (bounding boxes). [cite: 23]
+![](./README_image/datasetinfo.jpg)
 
 ### Data Statistics
 
