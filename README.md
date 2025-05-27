@@ -13,6 +13,13 @@ Food defect detection is a critical task in quality control for the food industr
 
 FDD-48 is a novel benchmark dataset for food defect detection designed to address the limitations of existing datasets by providing diverse real-world scenarios, fine-grained defect categories, and instance-level annotations.
 
+## Dataset Overview
+* **Food Types:** 13 (apple, apricot, banana, cantaloupe, cherry, lychee, mango, orange, peach, pear, plum, strawberry, and watermelon)
+* **Defect Types:** 48 distinct defect categories.
+* **Real-World Scenarios:** Covers diverse scenarios including Planting (52%), Transportation (34%), and Consumption (14%).
+* **Annotation Level:** Instance-level annotations (bounding boxes).
+![](./README_image/dataset.jpg)
+
 ## Food Defect Categories
 
 ![](./README_image/datasetinfo.jpg)
