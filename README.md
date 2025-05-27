@@ -18,6 +18,7 @@ FDD-48 is a novel benchmark dataset for food defect detection designed to addres
 * **Defect Types:** 48 distinct defect categories.
 * **Real-World Scenarios:** Covers diverse scenarios including Planting (52%), Transportation (34%), and Consumption (14%).
 * **Annotation Level:** Instance-level annotations (bounding boxes).
+
 ![](./README_image/dataset.jpg)
 
 ### Food Defect Categories
