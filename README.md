@@ -1,71 +1,82 @@
-# FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios
+# Supplementary material for "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios"
 
-This repository contains the official dataset and code for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", under review in Proceedings of ACM Multimedia 2025 (MM'25) Dataset Track.
-
-**Authors:** Ruihao Xu, Yong Liu, Yansong Tang* (* Corresponding author)
-**Affiliation:** Tsinghua Shenzhen International Graduate School, Tsinghua University, Shenzhen, Guangdong, China
+This repository contains the supplementary material for the paper "FDD-48: Towards Real-World Food Defect Detection with Fine-grained Annotations across Diverse Scenarios", under review in Proceedings of ACM Multimedia 2025 (MM'25) Dataset Track.
 
 ## FDD-48 Dataset
 
-FDD-48 is a novel benchmark dataset for food defect detection designed to address the limitations of existing datasets by providing diverse real-world scenarios, fine-grained defect categories, and instance-level annotations. [Dataset can be download here.]()
-
-### Dataset Overview
-* Covers diverse real-world scenarios including Planting, Transportation, and Consumption.
-* Consists of 13 food categories, 48 food defect categories.
-* Includes 4000 images, of which 1503 images are labeled, and 2497 images are unlabeled. The labeled data is randomly split into training and testing sets in a 7:3 ratio.
-* In labeled images, there are 15,913 instance-level annotations with defected food types and bounding boxes. Approximately 10.58 objects per image.
-
-![](./README_image/dataset.jpg)
+### Download Dataset
+[Dataset can be download here.]()
 
 ### Food Defect Categories
 
 ![](./README_image/datasetinfo.jpg)
 
-### Data Acquisition and Annotation Workflow
-
-![](./README_image/datasetcon.jpg)
-
-The data acquisition and annotation pipeline involved several steps:
-1.  **Web Crawling:** Initial collection of 50,000 raw images using "food category + defect type" as keywords.
-2.  **MLLM Discrimination (Noisy Data Filtering):** A multimodal large model (MiniCPM-V-2.6) was used to automatically assess and remove images not containing the target food type.
-3.  **Duplicate Removal:** DINOv2 was used to extract image features, and images with high similarity were removed.
-5.  **OVD Pre-annotation:** YOLO-World, an open-source object detector, was used with textual prompts (13 fruit names) to generate initial bounding box annotations for normal and defective fruits. The confidence threshold was lowered to improve detection of defective fruits.
-7.  **Manual Annotation:** Manual verification was conducted to annotate missed fruit instances and assign specific defect labels to all bounding boxes, ensuring high-quality annotations.
-
 ### More Dataset Examples
 
 ![](./README_image/datasetmore.jpg)
 
-## FDDet Method
+## FDDet
 
-FDDet is a food defect detection model tailored for real-world scenarios, particularly under limited annotated data conditions. It employs RTMDet as its baseline.
+### Implementation Details
 
-### BBoxMixUp
+To ensure training stability while reducing training time overhead, FDDet employs a two-stage training scheme: first conducting fully supervised training until model convergence, then initiating semi-supervised training from the best-performing checkpoint.
+For BBoxMixUp, the default Beta distribution parameters are $\alpha=1$ and $\beta=0.5$. In the semi-supervised learning framework, the default threshold for initial pseudo-label filtering is 0.35. For CGPC, RegNet is used as the default pre-trained visual backbone. Both training stages use a batch size of 32. The first training stage runs for 300 epochs. The second stage runs for 1000 iterations, with each batch comprising a 1:1 ratio of labeled to unlabeled data. We use the AdamW optimizer with a learning rate of 0.004.
 
-![](./README_image/mix.jpg)
+### Ablation Study
 
-* A novel data augmentation technique specifically designed for food defect detection.
-* It performs localized mixing exclusively within bounding boxes of the same defect category.
-* **Goal:** To break erroneous associations between defect-irrelevant features (e.g., shape, color of the fruit) and defect types, enhance diversity in non-defect features, and mitigate overfitting due to data scarcity.
+#### Component Analysis
 
-### Semi-Supervised Learning (SSL) Adaptation
-* Leverages the 2,497 unlabeled samples in FDD-48 to improve model robustness.
-* Addresses training collapse issues encountered with common semi-supervised object detection frameworks on FDD-48.
-* **Modifications to stabilize training and improve performance:**
-    * **Buffer Weight Updates:** The teacher model's buffer weights (e.g., Batch Normalization parameters) are updated via Exponential Moving Average (EMA). This allows the teacher model to adapt to domain shifts between labeled and unlabeled data.
-    * **Pseudo-label Filtering Threshold:** A lower fixed threshold (e.g., 0.35) is used for pseudo-label filtering instead of conventional high-confidence thresholds (e.g., 0.9). This retains more potentially valuable pseudo-labels, especially given the high similarity between certain food defect types and inherently lower model confidence scores on FDD-48.
+We conduct an ablation study on the FDD-48 dataset to evaluate the contribution of each proposed component: BBoxMixUp (BM), semi-supervised learning (SSL), and Consistency-Guided Pseudo-Label Calibration (CGPC).
 
-### Consistency-Guided Pseudo-Label Calibration (CGPC)
+| **BM** | **SSL** | **CGPC** | **mAP<sub>50:95</sub> (%)** | **mAP<sub>50</sub> (%)** | **mAP<sub>75</sub> (%)** |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|  |  |  | 40.0 | 45.6 | 43.7 |
+| ✓ |  |  | 41.4 | 47.9 | 44.7 |
+| ✓ | ✓ |  | 41.7 | 48.3 | 45.2 |
+| ✓ | ✓ | ✓ | **42.2** | **49.0** | **46.0** |
 
-![](./README_image/cgpc.jpg)
+#### Beta Distribution Parameters ($\alpha$, $\beta$) in BBoxMixUp
 
-* A novel pseudo-label filtering and refinement strategy to improve the quality of pseudo-labels generated by the teacher model in the SSL framework.
-* **Core Idea:** Enforces multi-dimensional consistency constraints to calibrate initial pseudo-labels.
-* **Context-Semantic Consistency:** Assumes food instances within the same image typically belong to the same high-level food category. All pseudo-labels in a single image are unified to the most frequent food type identified among them.
-* **Visual-Semantic Consistency:** Ensures visually similar regions receive consistent labels. Region features are extracted using an external pretrained backbone (e.g., RegNet). For each pseudo-label, its "peers" (regions with feature similarity exceeding a threshold) are identified, and the label is replaced with the most frequent label among these peers. Using an external backbone helps mitigate the detection model's overfitting and biases.
-* **Spatial Consistency:** Removes spatially redundant pseudo-labels. An IOU-based method similar to Non-Maximum Suppression (NMS) is applied after context-semantic and visual-semantic corrections to eliminate duplicate detections for the same object instance.
+We conducted an ablation study to determine the optimal hyperparameters $\alpha$ and $\beta$ for the Beta distribution used in BBoxMixUp, which dictates the mixing ratio $\lambda$. The model configuration used was baseline+BBoxMixUp, and results were reported on the FDD-48 dataset.
 
+We explored four distinct pairs of $(\alpha, \beta)$ values, each representing a different characteristic for the distribution of $\lambda$: $(\alpha=0.5, \beta=0.5)$ which generates a U-shaped distribution, favoring $\lambda$ values close to 0 or 1; $(\alpha=1, \beta=1)$ which results in a uniform distribution, where any $\lambda$ between 0 and 1 is equally probable; $(\alpha=0.5, \beta=1)$ which produces a distribution skewed towards 0, meaning the candidate region $I_{i'}(b_{i'j'})$ often contributes more to the mix; and $(\alpha=1, \beta=0.5)$ which produces a distribution skewed towards 1, meaning the target region $I_i(b_{ij})$ often contributes more to the mix.
 
-## Citation
+| **α** | **β** | **mAP<sub>50:95</sub>(%)** | **mAP<sub>50</sub>(%)** | **mAP<sub>75</sub>(%)** |
+|:---:|:---:|:---:|:---:|:---:|
+| 0.5 | 0.5 | 38.3 | 45.7 | 42.0 |
+| 1.0 | 1.0 | 37.0 | 43.1 | 40.1 |
+| 0.5 | 1.0 | 37.5 | 44.5 | 41.0 |
+| 1.0 | 0.5 | **41.4** | **47.9** | **44.7** |
 
-If you use FDD-48 or FDDet in your research, please cite our paper: (bibtex coming soon)
+#### Threshold for Initial Selection of Pseudo-Labels
+
+We investigated the impact of the initial pseudo-label filtering threshold. A lower threshold generally provides more candidate pseudo-labels for our CGPC to utilize.
+
+| **thr.** | **mAP<sub>50:95</sub>(%)** | **mAP<sub>50</sub>(%)** | **mAP<sub>75</sub>(%)** |
+|:--------:|:--------------------------:|:--------------------:|:--------------------:|
+| 0.30     | 42.1                       | 48.7                 | 45.8                 |
+| 0.35     | **42.2**                   | **49.0**             | **46.0**             |
+| 0.40     | 41.8                       | 48.3                 | 45.0                 |
+| 0.45     | 42.0                       | 48.4                 | 45.2                 |
+| 0.50     | 41.6                       | 48.0                 | 44.8                 |
+
+#### Threshold of feature similarity in CGPC
+
+We conducted an ablation study to determine the optimal feature similarity threshold for identifying peer pseudo-labels within the Visual-Semantic Consistency component of CGPC.
+
+| **thr.** | **mAP<sub>50:95</sub>(%)** | **mAP<sub>50</sub>(%)** | **mAP<sub>75</sub>(%)** |
+|:---:|:---:|:---:|:---:|
+| 0.75 | 42.0 | 48.5 | 45.3 |
+| 0.80 | **42.2** | **49.0** | **46.0** |
+| 0.85 | 42.0 | 48.5 | 45.2 |
+| 0.90 | 41.5 | 48.0 | 44.8 |
+
+#### Pre-trained visual backbone used to extract feature similarity in CGPC
+
+To select an effective pre-trained visual backbone for extracting region features in the Visual-Semantic Consistency component of CGPC, we experimented with ResNet-152, DINOv2-ViT-L-14, and RegNet-Y-32GF.
+
+| **Model** | **mAP<sub>50:95</sub>(%)** | **mAP<sub>50</sub>(%)** | **mAP<sub>75</sub>(%)** |
+|:-----------------:|:------:|:------:|:------:|
+| ResNet-152        | **42.2** |  48.8  |  45.9  |
+| DINOv2-ViT-L-14   |  42.1  |  48.7  |  45.6  |
+| RegNet-Y-32GF     | **42.2** | **49.0** | **46.0** |
