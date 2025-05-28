@@ -24,7 +24,7 @@ For BBoxMixUp, the default Beta distribution parameters are $\alpha=1$ and $\bet
 
 ### Ablation Study
 
-#### Component Analysis
+#### 1. Component Analysis
 
 We conduct an ablation study on the FDD-48 dataset to evaluate the contribution of each proposed component: BBoxMixUp (BM), semi-supervised learning (SSL), and Consistency-Guided Pseudo-Label Calibration (CGPC).
 
@@ -35,7 +35,7 @@ We conduct an ablation study on the FDD-48 dataset to evaluate the contribution 
 | ✓ | ✓ |  | 41.7 | 48.3 | 45.2 |
 | ✓ | ✓ | ✓ | **42.2** | **49.0** | **46.0** |
 
-#### Beta Distribution Parameters ($\alpha$, $\beta$) in BBoxMixUp
+#### 2. Beta Distribution Parameters ($\alpha$, $\beta$) in BBoxMixUp
 
 We conducted an ablation study to determine the optimal hyperparameters $\alpha$ and $\beta$ for the Beta distribution used in BBoxMixUp, which dictates the mixing ratio $\lambda$. The model configuration used was baseline+BBoxMixUp, and results were reported on the FDD-48 dataset.
 
@@ -48,7 +48,7 @@ We explored four distinct pairs of $(\alpha, \beta)$ values, each representing a
 | 0.5 | 1.0 | 37.5 | 44.5 | 41.0 |
 | 1.0 | 0.5 | **41.4** | **47.9** | **44.7** |
 
-#### Threshold for Initial Selection of Pseudo-Labels
+#### 3. Threshold for Initial Selection of Pseudo-Labels
 
 We investigated the impact of the initial pseudo-label filtering threshold. A lower threshold generally provides more candidate pseudo-labels for our CGPC to utilize.
 
@@ -60,7 +60,7 @@ We investigated the impact of the initial pseudo-label filtering threshold. A lo
 | 0.45     | 42.0                       | 48.4                 | 45.2                 |
 | 0.50     | 41.6                       | 48.0                 | 44.8                 |
 
-#### Threshold of feature similarity in CGPC
+#### 4. Threshold of feature similarity in CGPC
 
 We conducted an ablation study to determine the optimal feature similarity threshold for identifying peer pseudo-labels within the Visual-Semantic Consistency component of CGPC.
 
@@ -71,7 +71,7 @@ We conducted an ablation study to determine the optimal feature similarity thres
 | 0.85 | 42.0 | 48.5 | 45.2 |
 | 0.90 | 41.5 | 48.0 | 44.8 |
 
-#### Pre-trained visual backbone used to extract feature similarity in CGPC
+#### 5. Pre-trained visual backbone used to extract feature similarity in CGPC
 
 To select an effective pre-trained visual backbone for extracting region features in the Visual-Semantic Consistency component of CGPC, we experimented with ResNet-152, DINOv2-ViT-L-14, and RegNet-Y-32GF.
 
